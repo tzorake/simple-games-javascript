@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/index.css">
+    
+</head>
+<body>
+    <div id="col-wrapper" class="take-whole-space">
+        <div id="row-wrapper">
+            <div id="game">
+                <div id="start-screen"></div>
+                <canvas id="canvas"></canvas>
+                <div id="gameover-screen">
+                    <p>Game Over</p>
+                </div>
+            </div>
+            <div id="settings">
+                <div id="col-wrapper" class="take-whole-space">
+                    <div id="row-wrapper">
+                        <div id="setting-wrapper">
+                            <p id="title" class="game-score">Score: 0</p>
+                            <div id="button">
+                                <a href="#" id="start-button">Start</a>
+                            </div>
+                            <div id="button">
+                                <a href="#" id="pause-button">Pause</a>
+                            </div>
+                            <p id="title">Controls</p>
+                            <div class="buttons">
+                                <div class="button-row">
+                                    <div class="control-button up"><p>w</p></div>
+                                </div>
+                                <div class="button-row">
+                                    <div class="control-button left"><p>a</p></div>
+                                    <div class="control-button down"><p>s</p></div>
+                                    <div class="control-button right"><p>d</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script src="./js/util.js"></script>
+    <script src="./js/graphics.js"></script>
+    <script src="./js/brain.js"></script>
+    <script src="./js/vector.js"></script>
+    <script src="./js/observer.js"></script>
+    <script src="./js/snake.js"></script>
+    <script src="./js/game.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>
