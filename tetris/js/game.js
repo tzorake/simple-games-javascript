@@ -150,7 +150,7 @@ class Game {
             const nextTetrominoIndex = Utilities.getRandomInt(0, tetrominosLength);
             const finished = !this.isTetrominoFit(this.tetromino.position, this.tetromino.vectors);
             this.observer.useState({ key : 'nextTetrominoIndex', value : nextTetrominoIndex }, (observable) => { observable.nextTetromino() });
-            this.observer.updateState({ key : 'finished', value : finished });
+            this.observer.useState({ key : 'finished', value : finished }, (observable) => Configuration.GAMEOVER_SCREEN.style = `visibility: ${observable.isFinished() ? 'visible' : 'hidden'};`);
         }
     }
 
@@ -210,7 +210,8 @@ class Game {
 
 
     states() {
-        this.observer.addState({ key : 'finished', value : true}, () => console.info('Game is over!'));
+        this.observer.addState({ key : 'finished', value : true}, );
+        this.observer.addState({ key : 'finished', value : false}, () => Configuration.GAMEOVER_SCREEN.style = 'visibility: hidden;');
     }
 
 

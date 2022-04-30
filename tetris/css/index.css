@@ -27,7 +27,31 @@ body {
 
 #game {
     display: flex;
+    position: relative;
+
 }
+
+#gameover-screen {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #1e1e28;
+    visibility: hidden;
+}
+
+#gameover-screen p {
+    color: #ffffff;
+    text-align: center;
+    font-size: 3em;
+    user-select: none;
+}
+
 
 #settings {
     display: flex;
