@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,900&display=swap');
+
+body {
+    background: rgba(20, 20, 30, 1.0);
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+.take-whole-space {
+    width: 100%;
+    height: 100%;
+}
+
+#row-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#col-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#game {
+    display: flex;
+}
+
+#settings {
+    display: flex;
+    width: 240px;
+}
+
+
+#setting-wrapper {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: space-between;
+    height: 455px;
+}
+
+#settings {
+    width: 240px;
+    gap: 1em;
+}
+
+#title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 1.5em;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    width: 150px;
+    height: 100px;
+}
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.control-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(0deg, rgba(255,150,150,1) 0%, rgba(255,180,130,1) 100%);
+    width: 40px;
+    height: 40px;
+    border-radius: 0.2em;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+#start-button, #pause-button, .control-button {
+    color: #ffffff;
+    font-weight: 900;
+    font-family: 'Roboto', sans-serif;
+    background: rgba(40, 200, 105, 1.0);
+
+}
+
+#start-button, #pause-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 150px;
+    height: 40px;
+    border-radius: 0.2em;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+
+
+.tile-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    width: 35px;
+    height: 35px;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+.cyan-tile {
+    background: url(../img/cyan-tile.png) no-repeat, black;
+}
+
+.blue-tile {
+    background: url(../img/blue-tile.png) no-repeat, black;
+}
+
+.orange-tile {
+    background: url(../img/orange-tile.png) no-repeat, black;
+}
+
+.yellow-tile {
+    background: url(../img/yellow-tile.png) no-repeat, black;
+}
+
+.green-tile {
+    background: url(../img/green-tile.png) no-repeat, black;
+}
+
+.magenta-tile {
+    background: url(../img/magenta-tile.png) no-repeat, black;
+}
+
+.red-tile {
+    background: url(../img/red-tile.png) no-repeat, black;
+}
