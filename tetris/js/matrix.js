@@ -13,6 +13,7 @@ class Matrix {
         this.shape = [mtx.length, mtx[0].length];
     }
 
+    // matrix addition
     add(anotherMatrix) {
         anotherMatrix = anotherMatrix instanceof Matrix ? anotherMatrix : anotherMatrix.toMatrix();
 
@@ -25,6 +26,7 @@ class Matrix {
         return new Matrix(matrix);
     }
 
+    // matrix multiplication
     multiply(anotherMatrix) {
         anotherMatrix = anotherMatrix instanceof Matrix ? anotherMatrix : anotherMatrix.toMatrix();
 
@@ -46,6 +48,7 @@ class Matrix {
         return new Matrix(matrix);
     }
 
+    // matrix subtraction
     subtract(anotherMatrix) {
         anotherMatrix = anotherMatrix instanceof Matrix ? anotherMatrix : anotherMatrix.toMatrix();
 
@@ -58,6 +61,7 @@ class Matrix {
         return new Matrix(matrix);
     }
 
+    // get matrix row
     row(index) {
 
         if (index < 0 && index >= -this.shape[0]) {
@@ -71,6 +75,7 @@ class Matrix {
         return this.mtx[index];
     }
 
+    // get matrix column
     col(index, wrap) {
         if (index < 0 && index >= -this.shape[1]) {
             index = Utilities.mod(index, this.shape[1]);
@@ -83,6 +88,7 @@ class Matrix {
         return this.mtx.map(item => wrap === undefined || false ? item[index] : [item[index]]);
     }
 
+    // print matrix
     print() {
         this.mtx.forEach(row => {
             let string = "";
@@ -93,6 +99,7 @@ class Matrix {
         });
     }
 
+    // reshape matrix to `shape` shape (if current and passed shapes compitable)
     reshape(shape) {
         if (shape[0] * shape[1] != this.shape[0] * this.shape[1]) {
             console.error('ERROR: Use valid shape to rehape the matrix!');
@@ -103,10 +110,12 @@ class Matrix {
         return new Matrix(mtx);
     }
 
+    // convert matirx to array
     toArray() {
         return this.mtx.reduce((prev, next) => new Array(...prev, ...next));;
     }
 
+    // convert marix to vector
     toVector() {
         if (this.shape[0] !== 2 || this.shape[1] !== 1) {
             console.error('ERROR: The matrix, which you want to convert to Vector2, can\'t be converted because it has invalid shape!')
@@ -115,6 +124,7 @@ class Matrix {
         return new Vector2(this.mtx[0][0], this.mtx[1][0]);
     }
 
+    // checks if passed array into constructor is valid
     isValid() {
         // mtx is an array, each subarray is an array and they are the same length
         return Array.isArray(this.mtx) && 

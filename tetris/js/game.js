@@ -4,9 +4,7 @@ import { Utilities } from './util.js';
 import { Vector2 } from './vector.js';
 import { PlayerController } from './controller.js';
 import { Tetrominos, Tiles, Keys } from './enum.js';
-import { Tetromino, TetrominoFactory, Tile } from './tetromino.js';
-import { Observer } from './observer.js';
-
+import { TetrominoFactory, Tile } from './tetromino.js';
 export { Game };
 
 class Game {
@@ -16,13 +14,12 @@ class Game {
         this.height = Configuration.GAME_HEIGHT;
         this.tileSize = Configuration.TILE_SIZE;
 
-        this.observer = new Observer(this);
         this.controller = new PlayerController(this);
 
-        this.states();
         this.startGame();
     }
 
+    // starts game and reset every game state to initial
     startGame() {
         this.accumulatedTime = 0;
 
@@ -39,15 +36,16 @@ class Game {
 
         this.lines = [];
 
-        const randomTetrominoIndex = Utilities.getRandomInt(0, Object.keys(Tetrominos).length);
-        this.tetromino = TetrominoFactory.getInstance(randomTetrominoIndex);
-
-        const nextTetrominoIndex = Utilities.getRandomInt(0, Object.keys(Tetrominos).length);
-        this.observer.useState({ key : 'nextTetrominoIndex', value : nextTetrominoIndex }, (observable) => { observable.nextTetromino() });
+        this.tetromino = TetrominoFactory.getRandomInstance();
+        
+        const tetrominosLength = Object.keys(Tetrominos).length;
+        this.nextTetrominoIndex = Utilities.getRandomInt(0, tetrominosLength);
+        this.nextTetromino();
 
         this.score = 0;
     }
 
+    // game step
     step(delta) {
         this.accumulatedTime += delta;
 
@@ -80,11 +78,12 @@ class Game {
         }
 
         if (this.accumulatedTime >= this.tickTime()) {
-            this._step();
+            this.tetrominoStep();
         }
     }
 
-    _step() {
+    // tetromino step
+    tetrominoStep() {
         this.accumulatedTime = 0;
 
         const cells = this.cells;
@@ -125,12 +124,11 @@ class Game {
                 }
             });
             
+            // increment score
             if (this.lines.length > 0) {
                 this.score += (1 << this.lines.length) * 100;
 
-                this.observer.useState({ key : 'score', value : this.score }, (observable) => {
-                    Configuration.SCORE_ELEMENT.innerHTML = `Score: ${observable.score}`;
-                });
+                this.updateScoreElement();
             }
 
             // clear lines
@@ -147,13 +145,24 @@ class Game {
             // new tetromino
             const tetrominosLength = Object.keys(Tetrominos).length;
             this.tetromino = TetrominoFactory.getInstance(this.nextTetrominoIndex);
-            const nextTetrominoIndex = Utilities.getRandomInt(0, tetrominosLength);
-            const finished = !this.isTetrominoFit(this.tetromino.position, this.tetromino.vectors);
-            this.observer.useState({ key : 'nextTetrominoIndex', value : nextTetrominoIndex }, (observable) => { observable.nextTetromino() });
-            this.observer.useState({ key : 'finished', value : finished }, (observable) => Configuration.GAMEOVER_SCREEN.style = `visibility: ${observable.isFinished() ? 'visible' : 'hidden'};`);
+            this.nextTetrominoIndex = Utilities.getRandomInt(0, tetrominosLength);
+            this.finished = !this.isTetrominoFit(this.tetromino.position, this.tetromino.vectors);
+            this.nextTetromino();
+            this.updateGameoverScreen();
         }
     }
 
+    // updates `SCORE_ELEMENT`
+    updateScoreElement() {
+        Configuration.SCORE_ELEMENT.innerHTML = Configuration.SCORE_TEXT + this.score;
+    }
+
+    // updates `GAMEOVER_SCREEN`
+    updateGameoverScreen() {
+        Configuration.GAMEOVER_SCREEN.style = `visibility: ${this.isFinished() ? 'visible' : 'hidden'};`;
+    }
+
+    // draws each element on the screen
     draw() {
         const G = this.G;
 
@@ -182,6 +191,7 @@ class Game {
         });
     }
 
+    // checks if tetromino fit in `position` when it has current `vectors`
     isTetrominoFit(position, vectors) {
         const cells = this.cells;
         const vectorPositions = vectors.map(vec => position.add(vec));
@@ -196,25 +206,22 @@ class Game {
         return true;
     }
 
+    // `paused` getter
     isPaused() {
         return this.paused;
     }
 
+    // `finished` getter
     isFinished() {
         return this.finished;
     }
 
+    // game tick
     tickTime() {
         return 1000 / 5;
     }
 
-
-    states() {
-        this.observer.addState({ key : 'finished', value : true}, );
-        this.observer.addState({ key : 'finished', value : false}, () => Configuration.GAMEOVER_SCREEN.style = 'visibility: hidden;');
-    }
-
-
+    // changes tetromino in `NEXT_TETROMINO_ELEMENT`
     nextTetromino() {
         const eachClass = Configuration.TILE_PATHS.map(path => /\/(\w+-\w+)/g.exec(path)[1]);
         const tetromino = TetrominoFactory.getInstance(this.nextTetrominoIndex);

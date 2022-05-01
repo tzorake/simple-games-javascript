@@ -9,6 +9,7 @@ class Configuration {
     static NEXT_TETROMINO_ELEMENT = document.querySelector('#next-tetromino .tetromino');
     static CANVAS = document.querySelector('#canvas');
     static GAMEOVER_SCREEN = document.querySelector('#gameover-screen');
+    static SCORE_TEXT = 'Score: ';
     static GRAPHICS_INSTANCE = new Graphics(Configuration.CANVAS, Configuration.CANVAS.getContext('2d')); 
     static GAME_WIDTH = 12;
     static GAME_HEIGHT = 21;

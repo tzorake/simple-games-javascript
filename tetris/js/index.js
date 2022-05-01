@@ -1,10 +1,9 @@
 import { Configuration } from './configuration.js';
 import { Game } from './game.js';
-import { Observer } from './observer.js'; 
 
 const game = new Game();
-const observer = game.observer;
 
+// main loop
 let lastFrameTime = Date.now();
 window.requestAnimationFrame(function frameHandler() {
     const now = Date.now();
@@ -19,25 +18,23 @@ window.requestAnimationFrame(function frameHandler() {
     window.requestAnimationFrame(frameHandler);
 });
 
+// listener for `START_BUTTON`
 Configuration.START_BUTTON.addEventListener('click', event => {
-    observer.useState({ key : 'finished', value : game.isFinished() }, observable => {
-        Configuration.GAMEOVER_SCREEN.style = `visibility: hidden;`;
-        observable.startGame();
-    });
+    game.startGame();
 
-    observer.useState({ key : 'score', value : game.score }, observable => {
-        Configuration.SCORE_ELEMENT.innerHTML = `Score: ${observable.score}`;
-    });
+    game.updateGameoverScreen();
+    game.updateScoreElement();
 });
 
+// listener for `PAUSE_BUTTON`
 Configuration.PAUSE_BUTTON.addEventListener('click', event => {
-    observer.useState({key : 'paused', value : game.isFinished() ? game.isPaused() : !game.isPaused()}, observable => {
-        if (!game.isFinished()) {
-            Configuration.PAUSE_BUTTON.innerHTML = game.isPaused() ? 'Resume' : 'Pause';
-        }
-    });
+    game.paused = game.isFinished() ? game.isPaused() : !game.isPaused();
+    if (!game.isFinished()) {
+        Configuration.PAUSE_BUTTON.innerHTML = game.isPaused() ? 'Resume' : 'Pause';
+    }
 });
 
+// listener for `CONTROL_BUTTONS` (switch wasd to arrows and visa versa)
 window.addEventListener('keydown', (event) => {
     const code = event.code;
     const up = document.querySelector('.control-button.up p');

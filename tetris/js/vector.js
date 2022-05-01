@@ -2,6 +2,7 @@ import { Matrix } from './matrix.js';
 export { Vector2 };
 
 class Vector2 {
+    // each possible direction
     static LEFT = new Vector2(-1, 0);
     static RIGHT = new Vector2(1, 0);
     static UP = new Vector2(0, -1);
@@ -18,6 +19,7 @@ class Vector2 {
         this.y = y;
     }
 
+    // vector addition
     add(anotherVector) {
         const first = this.toMatrix();
         const second = anotherVector instanceof Matrix ? anotherVector : anotherVector.toMatrix();
@@ -27,6 +29,7 @@ class Vector2 {
         return result.toVector();
     }
 
+    // vector subtraction
     subtract(anotherVector) {
         const first = this.toMatrix();
         const second = anotherVector instanceof Matrix ? anotherVector : anotherVector.toMatrix();
@@ -36,6 +39,7 @@ class Vector2 {
         return result.toVector();
     }
 
+    // vector multiplication
     multiply(anotherVector) {
         const first = this.toMatrix();
         const second = anotherVector instanceof Matrix ? anotherVector : anotherVector.toMatrix();
@@ -45,10 +49,12 @@ class Vector2 {
         return result.toVector();
     }
 
+    // converts vector to matrix
     toMatrix() {
         return new Matrix([[this.x],[this.y]]);
     }
 
+    // checks if array passed into constructor is valid
     isValid() {
         return Array.isArray(this.vec) &&
                this.vec.length === 2;
