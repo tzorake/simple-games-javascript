@@ -1,63 +1,236 @@
-const Graphics = {};
+export { Graphics };
 
-Graphics.canvas = null;
-Graphics.context = null;
-Graphics.setCanvas = setCanvas;
-Graphics.getCanvas = getCanvas;
-Graphics.setContext = setContext;
-Graphics.getContext = getContext;
-Graphics.rect = rect;
-Graphics.circle = circle;
-Graphics.background = background;
+class Graphics {
+    static EMPTY_STYLE = 'rgba(0, 0, 0, 0)';
+    
+    constructor(canvas, context) {
+        this.canvas = canvas;
+        this.context = context;
 
-function setCanvas(canvas) {
-    const parent = canvas.parentElement;
+        this.canvas.width = canvas.clientWidth;
+        this.canvas.height = canvas.clientHeight;
+    }
 
-    Graphics.canvas = canvas;
-    Graphics.canvas.width = parent.clientWidth;
-    Graphics.canvas.height = parent.clientHeight;
-}
+    getCanvas() {
+        return this.canvas;
+    }
+    
+    getContext() {
+        return this.context;
+    }
+    
+    pop() {
+        const context = this.getContext();
+    
+        context.restore();
+    }
+    
+    push() {
+        const context = this.getContext();
+    
+        context.save();
+    }
+    
+    translate(x, y) {
+        const context = this.getContext();
+    
+        context.translate(x, y);
+    }
+    
+    rotate(angle) {
+        const context = this.getContext();
 
-function getCanvas() {
-    return Graphics.canvas;
-}
+        context.rotate(angle);
+    }
 
-function setContext(context) {
-    Graphics.context = context;
-}
+    
+    rect(x, y, w, h, fill, stroke) {
+        let tl = undefined;
+        let tr = undefined;
+        let br = undefined;
+        let bl = undefined;
+        const context = this.context;
+        const doFill = !!fill, doStroke = !!stroke;
 
-function getContext() {
-    return Graphics.context;
-}
+        context.beginPath();
 
-function rect(x0, y0, x1, y1, color) {
-    const context = getContext();
+        if (typeof tl === 'undefined') {
+            context.rect(x, y, w, h);
+        } else {
+            if (typeof tr === 'undefined') {
+                tr = tl;
+            }
+            if (typeof br === 'undefined') {
+                br = tr;
+            }
+            if (typeof bl === 'undefined') {
+                bl = br;
+            }
 
-    const path = new Path2D();
-    path.moveTo(x0, y0);
-    path.lineTo(x1, y0);
-    path.lineTo(x1, y1);
-    path.lineTo(x0, y1);
-    path.lineTo(x0, y0);
+            const absW = Math.abs(w);
+            const absH = Math.abs(h);
+            const hw = absW / 2;
+            const hh = absH / 2;
 
-    context.fillStyle = color;
-    context.fill(path);
-    // context.strokeStyle = 'red';
-    // context.stroke(path);
-}
+            if (absW < 2 * tl) {
+                tl = hw;
+            }
+            if (absH < 2 * tl) {
+                tl = hh;
+            }
+            if (absW < 2 * tr) {
+                tr = hw;
+            }
+            if (absH < 2 * tr) {
+                tr = hh;
+            }
+            if (absW < 2 * br) {
+                br = hw;
+            }
+            if (absH < 2 * br) {
+                br = hh;
+            }
+            if (absW < 2 * bl) {
+                bl = hw;
+            }
+            if (absH < 2 * bl) {
+                bl = hh;
+            }
 
-function circle(x, y, r, color) {
-    const context = getContext();
+            context.beginPath();
+            context.moveTo(x + tl, y);
+            context.arcTo(x + w, y, x + w, y + h, tr);
+            context.arcTo(x + w, y + h, x, y + h, br);
+            context.arcTo(x, y + h, x, y, bl);
+            context.arcTo(x, y, x + w, y, tl);
+            context.closePath();
+        }
 
-    const path = new Path2D();
-    path.arc(x, y, r, 0, 2*Math.PI);
+        if (doFill) {
+            context.fillStyle = fill;
+            context.fill();
+        }
+        if (doStroke) {
+            context.strokeStyle = stroke;
+            context.stroke();
+        }
+        return this;
+    }
 
-    context.fillStyle = color;
-    context.fill(path);
-}
 
-function background(color) {
-    const canvas = Graphics.getCanvas();
+    ellipse(x, y, w, h, fill, stroke) {
+        const context = this.context;
+        const doFill = !!fill, doStroke = !!stroke;
 
-    Graphics.rect(0, 0, canvas.width, canvas.height, color)
+        const kappa = 0.5522847498,
+        ox = w / 2 * kappa,
+        oy = h / 2 * kappa,
+        xe = x + w,
+        ye = y + h,
+        xm = x + w / 2,
+        ym = y + h / 2;
+        context.beginPath();
+        context.moveTo(x, ym);
+        context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+        context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+        context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+        context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+
+        if (doFill) {
+            context.fillStyle = fill;
+            context.fill();
+        }
+        if (doStroke) {
+            context.strokeStyle = stroke;
+            context.stroke();
+        }
+    }
+
+    circle(x, y, d, fill, stroke) {
+        this.ellipse(x, y, d, d, fill, stroke);
+    }
+
+    acuteArcToBezier(start, size) {
+        const alpha = size / 2.0,
+          cos_alpha = Math.cos(alpha),
+          sin_alpha = Math.sin(alpha),
+          cot_alpha = 1.0 / Math.tan(alpha),
+          phi = start + alpha,
+          cos_phi = Math.cos(phi),
+          sin_phi = Math.sin(phi),
+          lambda = (4.0 - cos_alpha) / 3.0,
+          mu = sin_alpha + (cos_alpha - lambda) * cot_alpha;
+      
+        return {
+          ax: Math.cos(start).toFixed(7),
+          ay: Math.sin(start).toFixed(7),
+          bx: (lambda * cos_phi + mu * sin_phi).toFixed(7),
+          by: (lambda * sin_phi - mu * cos_phi).toFixed(7),
+          cx: (lambda * cos_phi - mu * sin_phi).toFixed(7),
+          cy: (lambda * sin_phi + mu * cos_phi).toFixed(7),
+          dx: Math.cos(start + size).toFixed(7),
+          dy: Math.sin(start + size).toFixed(7)
+        }
+    }
+
+    arc(x, y, w, h, start, stop, fill, stroke) {
+        const context = this.context;
+        const rx = w / 2.0;
+        const ry = h / 2.0;
+        const epsilon = 0.00001;
+        let arcToDraw = 0;
+        const curves = [];
+        const doFill = !!fill, doStroke = !!stroke;
+
+        x += rx;
+        y += ry;
+      
+        while (stop - start >= epsilon) {
+          arcToDraw = Math.min(stop - start, Math.PI/2);
+          curves.push(this.acuteArcToBezier(start, arcToDraw));
+          start += arcToDraw;
+        }
+      
+        if (doFill) {
+            context.beginPath();
+            curves.forEach((curve, index) => {
+                if (index === 0) {
+                    context.moveTo(x + curve.ax * rx, y + curve.ay * ry);
+                }
+                context.bezierCurveTo(x + curve.bx * rx, y + curve.by * ry,
+                                x + curve.cx * rx, y + curve.cy * ry,
+                                x + curve.dx * rx, y + curve.dy * ry);
+            });
+            context.lineTo(x, y);
+            context.closePath();
+            context.fillStyle = fill;
+            context.fill();
+        }
+
+        if (doStroke) {
+            context.beginPath();
+            curves.forEach((curve, index) => {
+                if (index === 0) {
+                    context.moveTo(x + curve.ax * rx, y + curve.ay * ry);
+                }
+                context.bezierCurveTo(x + curve.bx * rx, y + curve.by * ry,
+                                x + curve.cx * rx, y + curve.cy * ry,
+                                x + curve.dx * rx, y + curve.dy * ry);
+            });
+            context.lineTo(x, y);
+            context.closePath();
+            context.strokeStyle = stroke;
+            context.stroke();
+        }
+    }
+    
+    image(img, x, y, w, h) {
+        const context = this.getContext();
+        context.drawImage(img, x, y, w, h);
+    }
+    
+    background(fill) {
+        const canvas = this.getCanvas();
+        this.rect(0, 0, canvas.width, canvas.height, fill);
+    }
 }

@@ -25,30 +25,27 @@ body {
     justify-content: center;
 }
 
-#game, #gameover-screen, #canvas {
-    width: 800px;
-    height: 600px;
-}
-
 #game {
     position: relative;
 }
 
-#gameover-screen {
+#gameover-screen, #pause-screen {
     display: flex;
+    width: 100%;
+    height: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     position: absolute;
     top: 0px;
     left: 0px;
-    background-color: #1e1e28;
+    background-color: rgba(30, 30, 40, 0.5);
     visibility: hidden;
 }
 
-#gameover-screen p {
+#gameover-screen, #pause-screen p {
     color: #ffffff;
-    font-size: 8em;
+    font-size: 3em;
     user-select: none;
 }
 

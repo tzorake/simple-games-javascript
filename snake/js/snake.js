@@ -1,90 +1,50 @@
+import { Configuration } from './configuration.js';
+import { Vector2 } from './vector.js';
+
+export { Snake };
+
 class Snake {
     constructor(x, y) {
-        this.brain = new PlayerControllerBrain(this);
         this.head = new Vector2(x, y);
         this.tail = [];
-        this.startLength = 4;
-        this.score = 0;
-        this.vel = new Vector2(0, -1);
-        this.keyPool = [];
+        this.vel = Vector2.UP;
         this.alive = true;
 
-        this.init();
-    }
-
-    init() {
-        const head =  this.head;
-        const tail = this.tail;
-        
-        for (let i = 1; i < this.startLength; ++i) {
-            tail.push(new Vector2(head.x, head.y + 1));
+        for (let i = 1; i < Configuration.SNAKE_INIT_LENGTH; ++i) {
+            this.tail.push(new Vector2(this.head.x, this.head.y + 1));
         }
     }
 
-    update() {
-        const keyPool = this.keyPool;
-        const key = keyPool.length > 0 ? keyPool.shift() : null;
-        const vel = this.vel;
-
-        switch (key) {
-            case 'KeyW':
-            case 'ArrowUp':
-                if (!(vel.x == 0 && vel.y == 1)) 
-                    this.up();
-                break;
-            case 'KeyS':
-            case 'ArrowDown':
-                if (!(vel.x == 0 && vel.y == -1)) {
-                    this.down();
-                }
-                break;
-            case 'KeyA':
-            case'ArrowLeft':
-                if (!(vel.x == 1 && vel.y == 0)) {
-                    this.left();
-                }
-                break;
-            case 'KeyD':
-            case 'ArrowRight':
-                if (!(vel.x == -1 && vel.y == 0)) {
-                    this.right();
-                }
-                break;
-        }
-
-        this.move();
-    }
-
-    move() {
+    step() {
         const head =  this.head;
         const tail = this.tail;
         const velocity = this.vel;
 
         for (let i = tail.length - 1; i > 0; --i) {
-            tail[i].x = tail[i - 1].x;
-            tail[i].y = tail[i - 1].y;
+            // tail[i].x = tail[i - 1].x;
+            // tail[i].y = tail[i - 1].y;
+            tail[i] = new Vector2(tail[i - 1].x, tail[i - 1].y);
         }
 
-        tail[0].x = head.x;
-        tail[0].y = head.y;
+        // tail[0].x = head.x;
+        // tail[0].y = head.y;
 
-        head.x += velocity.x;
-        head.y += velocity.y;
+        tail[0] = new Vector2(head.x, head.y);
+
+        // head.x += velocity.x;
+        // head.y += velocity.y;
+
+        this.head = head.add(velocity);
     }
 
     intersects(pos) {
         const tail = this.tail;
 
-        return tail.some(block => block.x == pos.x && block.y == pos.y);
+        return tail.some(block => block.x === pos.x && block.y === pos.y);
     }
 
-    up() { this.vel = new Vector2(0, -1); }
-    
-    down() { this.vel = new Vector2(0, 1); }
-    
-    left() { this.vel = new Vector2(-1, 0); }
-    
-    right() { this.vel = new Vector2(1, 0); }
-
-    isAlive() { return this.alive; }
+    isAlive() {
+        return this.alive;
+    }
 }
+
