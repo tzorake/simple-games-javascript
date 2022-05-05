@@ -1,7 +1,8 @@
 export { PlayerController };
 
 class PlayerController {
-    constructor() {
+    constructor(controllable) {
+        this.controllable = controllable;
         this.keyPool = [];
         this.init();
     }
@@ -11,15 +12,17 @@ class PlayerController {
         
         (function() {
             window.addEventListener('keydown', (event) => {
-                const code = event.code;
+                if (!controllable.isPaused()) {
+                    const code = event.code;
                 
-                console.info(code + ' is pressed.')
+                    console.info(code + ' is pressed.')
 
-                if (keyPool.length > 2) {
-                    keyPool.shift();
+                    if (keyPool.length > 2) {
+                        keyPool.shift();
+                    }
+                    
+                    keyPool.push(code);
                 }
-                
-                keyPool.push(code);
             });
         })();
     }
