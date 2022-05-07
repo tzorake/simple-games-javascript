@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+
+
+    <div id="col-wrapper" class="take-whole-space">
+        <div id="row-wrapper">
+
+            <div id="game">
+                <div id="congrats-screen">
+                    <p>Congrats! You've won!</p>
+                </div>
+
+                <div id="pause-screen">
+                    <p>Pause</p>
+                </div>
+                
+                <canvas id="canvas"></canvas>
+            </div>
+
+            <div id="settings">
+                <div id="col-wrapper" class="take-whole-space">
+                    <div id="row-wrapper">
+                        <div id="setting-wrapper">
+
+                            <p id="title" class="game-score">Timer: 0</p>
+                            <div id="button">
+                                <a href="#" id="start-button">Start</a>
+                            </div>
+                            <div id="button">
+                                <a href="#" id="pause-button">Pause</a>
+                            </div>
+
+                            <p id="title">Difficulty</p>
+                            
+                            <div id="button">
+                                <a href="#" id="difficulty-button">easy</a>
+                            </div>
+
+                            <p id="title">Controls</p>
+                            <div class="buttons">
+                                <div class="button-row">
+                                    <div class="control-button"><p>a</p></div>
+                                </div>
+                                <div class="button-row">
+                                    <div class="control-button"><p>1</p></div>
+                                    <div class="control-button"><p>•••</p></div>
+                                    <div class="control-button"><p>9</p></div>
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <div id="mouse-canvas">
+                                    <canvas id="mouse-buttons" width="105" height="80"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+
+    <script type="module" src="./js/index.js"></script>
+</body>
+</html>
