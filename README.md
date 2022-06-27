@@ -5,6 +5,6 @@
 ### Running server
 
 ```console
-$ py server.py
+$ py start.py
 $ chrome.exe http://localhost:8080/
 ```
