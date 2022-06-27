@@ -9,14 +9,13 @@ class PlayerController {
 
     init() {
         const keyPool = this.keyPool;
-        
+        const controllable = this.controllable;
+
         (function() {
             window.addEventListener('keydown', (event) => {
                 if (!controllable.isPaused()) {
                     const code = event.code;
                 
-                    console.info(code + ' is pressed.')
-
                     if (keyPool.length > 2) {
                         keyPool.shift();
                     }

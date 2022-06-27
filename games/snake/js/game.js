@@ -15,7 +15,6 @@ class Game {
         this.width = Configuration.GAME_WIDTH;
         this.height = Configuration.GAME_HEIGHT;
         this.tileSize = Configuration.TILE_SIZE;
-
         this.controller = new PlayerController(this);
 
         this.startGame();
